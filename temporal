@@ -1,0 +1,135 @@
+// Configuración
+var SHEET_ID = '1CO5DzvDk61oeqYA-Ba4jtopPYZ_xN_jOj7EYY145bJw';
+var SHEET_NAME = 'BASE';
+
+// FUNCIÓN PRINCIPAL - Acepta parámetros de URL
+function doGet(e) {
+  console.log('=== FORMULARIO EJECUTADO ===');
+  
+  // Obtener parámetros de la URL
+  var params = e ? e.parameter : {};
+  
+  // Crear objeto con todos los parámetros prellenados
+  var prefillData = {
+    dni: params.DNI || params.dni || '',
+    fecha: params.Fecha || params.fecha || '',
+    asiste: params.Asiste || '',
+    nombres_apellidos: params.NOMBRES_APELLIDOS || '',
+    supervisor: params.SUPERVISOR_OPERACIONES || '',
+    cargo: params.CARGO || '',
+    camp: params.CAMP || '',
+    t_trabajo: params.T_TRABAJO || '',
+    codigo_id: params.CODIGO_ID || '',
+    compensado: params.Compensado || '',
+    fecha_compensado: params.Fecha_compensado || ''
+  };
+  
+  console.log('Datos recibidos:', prefillData);
+  
+  // Pasar parámetros al HTML
+  var template = HtmlService.createTemplateFromFile('Formulario');
+  
+  // Asignar todos los datos al template
+  template.dni = prefillData.dni;
+  template.fecha = prefillData.fecha;
+  template.asiste = prefillData.asiste;
+  template.nombres_apellidos = prefillData.nombres_apellidos;
+  template.supervisor = prefillData.supervisor;
+  template.cargo = prefillData.cargo;
+  template.camp = prefillData.camp;
+  template.t_trabajo = prefillData.t_trabajo;
+  template.codigo_id = prefillData.codigo_id;
+  template.compensado = prefillData.compensado;
+  template.fecha_compensado = prefillData.fecha_compensado;
+  
+  return template.evaluate()
+    .setTitle('Registro de Asistencia')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+// Función para procesar los datos - SIN VALIDACIÓN DE DNI
+function procesarDatos(data) {
+  console.log('=== PROCESANDO DATOS ===');
+  console.log('Datos recibidos:', data);
+  
+  try {
+    // Validar solo que el DNI no esté vacío
+    if (!data || !data.dni || data.dni.toString().trim() === '') {
+      return { 
+        success: false, 
+        message: 'El DNI es requerido' 
+      };
+    }
+    
+    var dni = data.dni.toString().trim();
+    
+    // NO HAY VALIDACIÓN DE 8 DÍGITOS - ACEPTA CUALQUIER LONGITUD
+    
+    // Conectar con Google Sheets
+    var spreadsheet = SpreadsheetApp.openById(SHEET_ID);
+    var sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    
+    if (!sheet) {
+      return { 
+        success: false, 
+        message: 'No se encontró la hoja de destino' 
+      };
+    }
+    
+    // Obtener la última fila con datos
+    var ultimaFila = sheet.getLastRow();
+    var filaDestino = Math.max(ultimaFila + 1, 2);
+    
+    // Preparar datos para guardar
+    var datosFila = [
+      dni, // Columna A: DNI
+      data.fecha || '', // Columna B: Fecha
+      '', // Columna C: Entrada (removido)
+      '', // Columna D: Salida (removido)
+      data.asiste || '', // Columna E: Asiste
+      data.nombres_apellidos || '', // Columna F: NOMBRES APELLIDOS
+      data.supervisor || '', // Columna G: SUPERVISOR OPERACIONES
+      data.cargo || '', // Columna H: CARGO
+      data.camp || '', // Columna I: CAMP
+      data.t_trabajo || '', // Columna J: T_TRABAJO
+      data.codigo_id || '', // Columna K: CODIGO_ID
+      data.compensado || '', // Columna L: Compensado
+      data.fecha_compensado || '', // Columna M: Fecha compensado
+      data.observaciones || '', // Columna N: Observaciones
+      new Date(), // Columna O: Fecha de registro
+      data.source || 'formulario', // Columna P: Origen
+      Session.getActiveUser().getEmail() || '' // Columna Q: Usuario
+    ];
+    
+    // Guardar en una sola operación
+    sheet.getRange(filaDestino, 1, 1, datosFila.length).setValues([datosFila]);
+    
+    // Formato de celdas - NO APLICAR FORMATO DE NÚMERO AL DNI
+    // sheet.getRange(filaDestino, 1).setNumberFormat('0'); // ESTA LÍNEA ELIMINADA
+    
+    if (data.fecha) sheet.getRange(filaDestino, 2).setNumberFormat('yyyy-mm-dd'); // Fecha
+    if (data.fecha_compensado) sheet.getRange(filaDestino, 13).setNumberFormat('yyyy-mm-dd'); // Fecha compensado
+    sheet.getRange(filaDestino, 15).setNumberFormat('yyyy-mm-dd hh:mm:ss'); // Fecha registro
+    
+    console.log('Datos guardados en fila:', filaDestino);
+    
+    return { 
+      success: true, 
+      message: 'Registro guardado exitosamente',
+      details: {
+        row: filaDestino,
+        dni: dni,
+        nombre: data.nombres_apellidos || '',
+        fecha: new Date().toLocaleDateString()
+      }
+    };
+    
+  } catch (error) {
+    console.error('Error en procesarDatos:', error);
+    return { 
+      success: false, 
+      message: 'Error al procesar: ' + error.toString(),
+      error: error.message
+    };
+  }
+}
