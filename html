@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Asistencia</title>
+  
+  <!-- Google Fonts - LATO -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ESTILOS GENERALES */
+    :root {
+      --primary: #4285F4;
+      --primary-dark: #3367D6;
+      --secondary: #34A853;
+      --danger: #EA4335;
+      --warning: #FBBC04;
+      --light: #F8F9FA;
+      --dark: #202124;
+      --gray: #5F6368;
+      --border: #DADCE0;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--dark);
+      background: #f5f7fa;
+      min-height: 100vh;
+      padding: 15px;
+    }
+    
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    /* HEADER */
+    .header {
+      background: white;
+      padding: 22px 28px;
+      border-radius: 12px 12px 0 0;
+      box-shadow: var(--shadow);
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    
+    .logo {
+      background: var(--primary);
+      color: white;
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    
+    .title h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--primary);
+    }
+    
+    .title p {
+      color: var(--gray);
+      font-size: 13px;
+    }
+    
+    /* MAIN CONTENT */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 25px;
+      margin-top: 0;
+    }
+    
+    /* FORM SECTION */
+    .form-section {
+      background: white;
+      padding: 25px;
+      border-radius: 0 0 0 12px;
+      box-shadow: var(--shadow);
+    }
+    
+    .section-title {
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    /* FORM GRID */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+    
+    .form-group {
+      margin-bottom: 0;
+    }
+    
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 500;
+      color: var(--gray);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .form-group label i {
+      color: var(--primary);
+      width: 18px;
+      font-size: 14px;
+    }
+    
+    /* ESTILOS PARA CAMPOS */
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 13.5px;
+      font-family: 'Lato', sans-serif;
+      transition: all 0.2s ease;
+      background: white;
+    }
+    
+    /* CAMPOS DE SOLO LECTURA */
+    .read-only-field {
+      background: #F8F9FA;
+      border-color: #E8EAED;
+      color: #333;
+      font-weight: 500;
+      cursor: default;
+    }
+    
+    /* CAMPOS EDITABLES */
+    .editable-field {
+      background: white;
+      border-color: var(--border);
+      color: var(--dark);
+    }
+    
+    .editable-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.1);
+    }
+    
+    /* SELECT EDITABLE */
+    select.editable-field {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+      padding-right: 36px;
+    }
+    
+    /* SECCIÓN DE INFORMACIÓN ADICIONAL */
+    .new-fields-section {
+      background: #F0F7FF;
+      border-radius: 10px;
+      padding: 22px;
+      margin: 25px 0;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .new-fields-section .section-title {
+      color: var(--primary-dark);
+      font-size: 17px;
+    }
+    
+    /* ESTILOS PARA SUBIDA DE ARCHIVOS */
+    .file-upload-area {
+      border: 2px dashed #dadce0;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+      cursor: pointer;
+    }
+    
+    .file-upload-area:hover {
+      border-color: #4285f4;
+      background: #f0f7ff;
+    }
+    
+    .file-upload-area.drag-over {
+      border-color: #34a853;
+      background: #e8f5e9;
+    }
+    
+    .upload-placeholder {
+      color: #5f6368;
+    }
+    
+    .file-preview {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .preview-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .file-icon {
+      font-size: 40px;
+      color: #4285f4;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8f0fe;
+      border-radius: 10px;
+    }
+    
+    .file-info h4 {
+      margin: 0 0 5px 0;
+      color: #202124;
+      font-size: 16px;
+    }
+    
+    .file-info p {
+      margin: 0;
+      color: #5f6368;
+      font-size: 13px;
+    }
+    
+    .btn-small {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    
+    .upload-progress {
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: #e8eaed;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #34a853, #0d9d58);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    #progressText {
+      font-size: 13px;
+      font-weight: 600;
+      color: #34a853;
+      min-width: 40px;
+    }
+    
+    /* Iconos por tipo de archivo */
+    .file-icon .fa-file-pdf { color: #ea4335; }
+    .file-icon .fa-file-image { color: #4285f4; }
+    .file-icon .fa-file-word { color: #2b579a; }
+    .file-icon .fa-file-excel { color: #217346; }
+    
+    /* BOTONES */
+    .buttons-section {
+      background: white;
+      padding: 22px 25px;
+      border-radius: 0 0 12px 0;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    
+    .btn {
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: 'Lato', sans-serif;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+    }
+    
+    .btn-secondary {
+      background: var(--light);
+      color: var(--gray);
+      border: 1.5px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: #E8EAED;
+    }
+    
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: #D32F2F;
+      transform: translateY(-1px);
+    }
+    
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    /* SIDEBAR */
+    .sidebar {
+      background: white;
+      padding: 22px;
+      border-radius: 0 0 12px 0;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    
+    /* VISTA PREVIA */
+    .data-preview {
+      background: #F8F9FA;
+      border-radius: 10px;
+      padding: 18px;
+      border: 1.5px solid var(--border);
+    }
+    
+    .data-preview h3 {
+      color: var(--primary);
+      font-size: 15px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .preview-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+    
+    .preview-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid #E8EAED;
+    }
+    
+    .preview-item:last-child {
+      border-bottom: none;
+    }
+    
+    .preview-label {
+      font-size: 12.5px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+    
+    .preview-value {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--dark);
+      text-align: right;
+      max-width: 140px;
+      word-break: break-word;
+    }
+    
+    /* MENSAJES */
+    .message-container {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 1000;
+      max-width: 380px;
+    }
+    
+    .message {
+      padding: 16px 18px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: slideIn 0.3s ease-out;
+      transform-origin: top right;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(80px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .message.success {
+      background: #D4EDDA;
+      color: #155724;
+      border-left: 3px solid #28A745;
+    }
+    
+    .message.error {
+      background: #F8D7DA;
+      color: #721c24;
+      border-left: 3px solid #DC3545;
+    }
+    
+    .message.warning {
+      background: #FFF3CD;
+      color: #856404;
+      border-left: 3px solid #FFC107;
+    }
+    
+    .message-icon {
+      font-size: 18px;
+    }
+    
+    .message-content {
+      flex: 1;
+    }
+    
+    .message-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    
+    .message-close {
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      font-size: 16px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    
+    .message-close:hover {
+      opacity: 1;
+    }
+    
+    /* LOADING */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.92);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      flex-direction: column;
+      gap: 18px;
+    }
+    
+    .spinner {
+      width: 54px;
+      height: 54px;
+      border: 4px solid #F3F3F3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: var(--primary);
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      .main-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-section {
+        border-radius: 0;
+      }
+      
+      .buttons-section {
+        border-radius: 0 0 12px 12px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      body {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Guardando registro...</div>
+  </div>
+  
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="title">
+            <h1>Registro de Asistencia</h1>
+            <p>Sistema de registro de personal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- FORM SECTION -->
+      <div class="form-section">
+        <!-- DATOS DEL SISTEMA -->
+        <div class="section-title">
+          <i class="fas fa-database"></i>
+          Datos del Sistema
+        </div>
+        
+        <div class="form-grid">
+          <!-- COLUMNA IZQUIERDA -->
+          <div class="form-group">
+            <label><i class="fas fa-id-card"></i> DNI</label>
+            <input type="text" id="dni" class="form-control read-only-field" 
+                   value="<?= dni ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-calendar-alt"></i> Fecha</label>
+            <input type="text" id="fecha" class="form-control read-only-field" 
+                   value="<?= fecha ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-user-check"></i> Última Asistencia</label>
+            <input type="text" id="asiste" class="form-control read-only-field" 
+                   value="<?= asiste ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-user"></i> Nombres y Apellidos</label>
+            <input type="text" id="nombres_apellidos" class="form-control read-only-field" 
+                   value="<?= nombres_apellidos ?>" 
+                   readonly>
+          </div>
+          
+          <!-- COLUMNA DERECHA -->
+          <div class="form-group">
+            <label><i class="fas fa-user-tie"></i> Supervisor</label>
+            <input type="text" id="supervisor" class="form-control read-only-field" 
+                   value="<?= supervisor ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-briefcase"></i> Cargo</label>
+            <input type="text" id="cargo" class="form-control read-only-field" 
+                   value="<?= cargo ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-building"></i> CAMP</label>
+            <input type="text" id="camp" class="form-control read-only-field" 
+                   value="<?= camp ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-business-time"></i> Tipo de Trabajo</label>
+            <input type="text" id="t_trabajo" class="form-control read-only-field" 
+                   value="<?= t_trabajo ?>" 
+                   readonly>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="fas fa-hashtag"></i> Código ID</label>
+            <input type="text" id="codigo_id" class="form-control read-only-field" 
+                   value="<?= codigo_id ?>" 
+                   readonly>
+          </div>
+        </div>
+        
+        <!-- INFORMACIÓN ADICIONAL -->
+        <div class="new-fields-section">
+          <div class="section-title">
+            <i class="fas fa-edit"></i>
+            Información Adicional
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label><i class="fas fa-balance-scale"></i> Compensado</label>
+              <select id="compensado" class="form-control editable-field">
+                <option value="">Seleccionar</option>
+                <option value="Si" <?= compensado == 'Si' ? 'selected' : '' ?>>Sí</option>
+                <option value="No" <?= compensado == 'No' ? 'selected' : '' ?>>No</option>
+                <option value="Pendiente" <?= compensado == 'Pendiente' ? 'selected' : '' ?>>Pendiente</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-calendar-day"></i> Fecha Compensado</label>
+              <input type="date" id="fecha_compensado" class="form-control editable-field" 
+                     value="<?= fecha_compensado ?>">
+            </div>
+            
+            <div class="form-group full-width">
+              <label><i class="fas fa-sticky-note"></i> Observaciones</label>
+              <textarea id="observaciones" class="form-control editable-field" rows="3" 
+                        placeholder="Ingrese observaciones adicionales..."></textarea>
+            </div>
+          </div>
+        </div>
+        
+        <!-- SECCIÓN PARA SUBIR ARCHIVO -->
+        <div class="new-fields-section">
+          <div class="section-title">
+            <i class="fas fa-paperclip"></i>
+            Adjuntar Archivo (Opcional)
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label><i class="fas fa-file-upload"></i> Seleccionar Archivo</label>
+              <div class="file-upload-area" id="fileUploadArea">
+                <input type="file" id="archivoInput" class="file-input" 
+                       accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" 
+                       style="display: none;">
+                
+                <div class="upload-placeholder" id="uploadPlaceholder">
+                  <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #4285f4; margin-bottom: 15px;"></i>
+                  <h3 style="margin-bottom: 10px;">Arrastra o haz clic para subir</h3>
+                  <p style="color: #666; margin-bottom: 20px;">
+                    Sube una foto o documento (PDF, JPG, PNG, DOC, XLS)<br>
+                    <strong>Tamaño máximo: 20MB</strong>
+                  </p>
+                  <button type="button" class="btn btn-secondary" onclick="document.getElementById('archivoInput').click()">
+                    <i class="fas fa-folder-open"></i> Seleccionar Archivo
+                  </button>
+                </div>
+                
+                <div class="file-preview" id="filePreview" style="display: none;">
+                  <div class="preview-content">
+                    <div class="file-icon" id="fileIcon">
+                      <i class="fas fa-file"></i>
+                    </div>
+                    <div class="file-info">
+                      <h4 id="fileName"></h4>
+                      <p id="fileSize"></p>
+                      <p id="fileType"></p>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeFile()">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                      <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span id="progressText">0%</span>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                <i class="fas fa-info-circle"></i> El archivo se guardará como: <strong>[Código ID]_[fecha].[extensión]</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <!-- VISTA PREVIA -->
+        <div class="data-preview">
+          <h3><i class="fas fa-eye"></i> Vista Previa</h3>
+          <div class="preview-list" id="previewList">
+            <!-- Los datos se cargarán con JavaScript -->
+          </div>
+        </div>
+        
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="submitForm()" id="submitBtn">
+            <i class="fas fa-save"></i>
+            Guardar Registro
+          </button>
+          
+          <button class="btn btn-secondary" onclick="updatePreview()">
+            <i class="fas fa-sync-alt"></i>
+            Actualizar Vista
+          </button>
+          
+          <button class="btn btn-danger" onclick="clearAdditionalFields()">
+            <i class="fas fa-trash-alt"></i>
+            Limpiar Campos
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CONTENEDOR DE MENSAJES -->
+  <div class="message-container" id="messageContainer"></div>
+  
+  <!-- JAVASCRIPT COMPLETO -->
+  <script>
+    // Variables globales
+    let isSubmitting = false;
+    let selectedFile = null;
+    
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Formulario cargado');
+      
+      // Actualizar vista previa inicial
+      updatePreview();
+      
+      // Deshabilitar todos los campos de solo lectura
+      disableReadOnlyFields();
+      
+      // Inicializar subida de archivos
+      initFileUpload();
+      
+      // Mostrar mensaje inicial si hay datos
+      if ('<?= dni ?>') {
+        showMessage('Datos cargados correctamente', 'success');
+      }
+    });
+    
+    // Deshabilitar campos de solo lectura
+    function disableReadOnlyFields() {
+      const readOnlyFields = document.querySelectorAll('.read-only-field');
+      readOnlyFields.forEach(field => {
+        field.setAttribute('readonly', 'true');
+        field.style.cursor = 'default';
+      });
+    }
+    
+    // Actualizar vista previa
+    function updatePreview() {
+      const previewList = document.getElementById('previewList');
+      const fields = [
+        { id: 'dni', label: 'DNI' },
+        { id: 'fecha', label: 'Fecha' },
+        { id: 'nombres_apellidos', label: 'Nombre' },
+        { id: 'asiste', label: 'Última Asistencia' },
+        { id: 'cargo', label: 'Cargo' },
+        { id: 'compensado', label: 'Compensado' },
+        { id: 'fecha_compensado', label: 'Fecha Compensado' },
+        { id: 'codigo_id', label: 'Código ID' }
+      ];
+      
+      let html = '';
+      
+      fields.forEach(field => {
+        const element = document.getElementById(field.id);
+        let value = element ? element.value : '';
+        
+        // Formatear valores vacíos
+        if (!value) {
+          if (field.id === 'compensado' || field.id === 'fecha_compensado') {
+            value = '<span style="color: #999; font-style: italic;">Pendiente</span>';
+          } else {
+            value = '<span style="color: #999; font-style: italic;">No especificado</span>';
+          }
+        }
+        
+        // Formatear fechas
+        if (field.id.includes('fecha') && value && !value.includes('Pendiente') && !value.includes('especificado')) {
+          const date = new Date(value);
+          if (!isNaN(date.getTime())) {
+            value = date.toLocaleDateString('es-ES');
+          }
+        }
+        
+        // Estilo diferente para campos editables
+        const isEditable = (field.id === 'compensado' || field.id === 'fecha_compensado');
+        const valueStyle = isEditable ? 'color: #4285f4; font-weight: 600;' : 'color: #333;';
+        
+        html += `
+          <div class="preview-item">
+            <span class="preview-label">${field.label}:</span>
+            <span class="preview-value" style="${valueStyle}">${value}</span>
+          </div>
+        `;
+      });
+      
+      // Agregar información de archivo si hay
+      if (selectedFile) {
+        html += `
+          <div class="preview-item">
+            <span class="preview-label">Archivo:</span>
+            <span class="preview-value" style="color: #4285f4; font-weight: 600;">
+              ${selectedFile.name} (${formatFileSize(selectedFile.size)})
+            </span>
+          </div>
+        `;
+      }
+      
+      previewList.innerHTML = html;
+    }
+    
+    // Inicializar subida de archivos
+    function initFileUpload() {
+      const uploadArea = document.getElementById('fileUploadArea');
+      const fileInput = document.getElementById('archivoInput');
+      
+      // Click en el área
+      uploadArea.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'BUTTON' && !selectedFile) {
+          fileInput.click();
+        }
+      });
+      
+      // Selección de archivo
+      fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+          handleFileSelect(this.files[0]);
+        }
+      });
+      
+      // Arrastrar y soltar
+      uploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+      });
+      
+      uploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+      });
+      
+      uploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFileSelect(e.dataTransfer.files[0]);
+        }
+      });
+    }
+    
+    // Manejar selección de archivo
+    function handleFileSelect(file) {
+      // Validar tamaño (20MB)
+      if (file.size > 20 * 1024 * 1024) {
+        showMessage('El archivo excede el tamaño máximo de 20MB', 'error', 'Archivo muy grande');
+        return;
+      }
+      
+      selectedFile = file;
+      showFilePreview(file);
+      updatePreview(); // Actualizar vista previa
+    }
+    
+    // Mostrar vista previa del archivo
+    function showFilePreview(file) {
+      const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+      const filePreview = document.getElementById('filePreview');
+      const fileName = document.getElementById('fileName');
+      const fileSize = document.getElementById('fileSize');
+      const fileType = document.getElementById('fileType');
+      const fileIcon = document.getElementById('fileIcon');
+      
+      // Ocultar placeholder, mostrar preview
+      uploadPlaceholder.style.display = 'none';
+      filePreview.style.display = 'block';
+      
+      // Actualizar información
+      fileName.textContent = file.name;
+      fileSize.textContent = formatFileSize(file.size);
+      fileType.textContent = getFileType(file.type);
+      
+      // Cambiar icono según tipo
+      const iconClass = getFileIconClass(file.type);
+      fileIcon.innerHTML = `<i class="fas ${iconClass}"></i>`;
+    }
+    
+    // Remover archivo seleccionado
+    function removeFile() {
+      const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+      const filePreview = document.getElementById('filePreview');
+      const fileInput = document.getElementById('archivoInput');
+      
+      selectedFile = null;
+      fileInput.value = '';
+      
+      uploadPlaceholder.style.display = 'block';
+      filePreview.style.display = 'none';
+      updatePreview(); // Actualizar vista previa
+    }
+    
+    // Funciones auxiliares para archivos
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    function getFileType(mimeType) {
+      const types = {
+        'application/pdf': 'PDF Document',
+        'image/jpeg': 'JPEG Image',
+        'image/jpg': 'JPEG Image',
+        'image/png': 'PNG Image',
+        'application/msword': 'Word Document',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Word Document',
+        'application/vnd.ms-excel': 'Excel Spreadsheet',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'Excel Spreadsheet'
+      };
+      return types[mimeType] || mimeType;
+    }
+    
+    function getFileIconClass(mimeType) {
+      const icons = {
+        'application/pdf': 'fa-file-pdf',
+        'image/jpeg': 'fa-file-image',
+        'image/jpg': 'fa-file-image',
+        'image/png': 'fa-file-image',
+        'application/msword': 'fa-file-word',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'fa-file-word',
+        'application/vnd.ms-excel': 'fa-file-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'fa-file-excel'
+      };
+      return icons[mimeType] || 'fa-file';
+    }
+    
+    // Mostrar mensaje
+    function showMessage(text, type = 'info', title = '') {
+      const messageContainer = document.getElementById('messageContainer');
+      const messageId = 'msg_' + Date.now();
+      
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+      
+      const messageHTML = `
+        <div class="message ${type}" id="${messageId}">
+          <div class="message-icon">${icons[type] || icons.info}</div>
+          <div class="message-content">
+            ${title ? `<div class="message-title">${title}</div>` : ''}
+            <div>${text}</div>
+          </div>
+          <button class="message-close" onclick="closeMessage('${messageId}')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      
+      messageContainer.insertAdjacentHTML('afterbegin', messageHTML);
+      
+      // Auto-remover después de tiempo
+      if (type === 'success' || type === 'info') {
+        setTimeout(() => {
+          closeMessage(messageId);
+        }, 4000);
+      }
+    }
+    
+    // Cerrar mensaje
+    function closeMessage(messageId) {
+      const message = document.getElementById(messageId);
+      if (message) {
+        message.style.animation = 'slideIn 0.3s ease-out reverse';
+        setTimeout(() => {
+          if (message.parentNode) {
+            message.parentNode.removeChild(message);
+          }
+        }, 300);
+      }
+    }
+    
+    // Mostrar/ocultar loading
+    function showLoading(text = 'Guardando registro...') {
+      document.getElementById('loadingText').textContent = text;
+      document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+    
+    function hideLoading() {
+      document.getElementById('loadingOverlay').style.display = 'none';
+    }
+    
+    // Enviar formulario
+    function submitForm() {
+      if (isSubmitting) return;
+      
+      // Validar que tengamos código ID si hay archivo
+      const codigoId = document.getElementById('codigo_id').value;
+      if (selectedFile && (!codigoId || codigoId.trim() === '')) {
+        showMessage('Para subir un archivo, el campo Código ID es requerido', 'error', 'Validación');
+        return;
+      }
+      
+      // Recolectar datos
+      const formData = {
+        dni: document.getElementById('dni').value,
+        fecha: document.getElementById('fecha').value,
+        asiste: document.getElementById('asiste').value,
+        nombres_apellidos: document.getElementById('nombres_apellidos').value,
+        supervisor: document.getElementById('supervisor').value,
+        cargo: document.getElementById('cargo').value,
+        camp: document.getElementById('camp').value,
+        t_trabajo: document.getElementById('t_trabajo').value,
+        codigo_id: codigoId,
+        compensado: document.getElementById('compensado').value,
+        fecha_compensado: document.getElementById('fecha_compensado').value,
+        observaciones: document.getElementById('observaciones').value,
+        source: 'formulario',
+        timestamp: new Date().toISOString()
+      };
+      
+      // Si hay archivo, convertirlo a Base64
+      if (selectedFile) {
+        isSubmitting = true;
+        showLoading('Subiendo archivo...');
+        document.getElementById('submitBtn').disabled = true;
+        
+        convertFileToBase64(selectedFile)
+          .then(base64Data => {
+            formData.archivoBase64 = base64Data.split(',')[1]; // Remover prefijo data:
+            formData.archivoNombre = selectedFile.name;
+            formData.archivoTipo = selectedFile.type;
+            
+            // Continuar con el envío normal
+            sendFormData(formData);
+          })
+          .catch(error => {
+            hideLoading();
+            isSubmitting = false;
+            document.getElementById('submitBtn').disabled = false;
+            showMessage('Error procesando archivo: ' + error.message, 'error', 'Archivo');
+          });
+      } else {
+        // Enviar sin archivo
+        isSubmitting = true;
+        showLoading();
+        document.getElementById('submitBtn').disabled = true;
+        sendFormData(formData);
+      }
+    }
+    
+    // Función para convertir archivo a Base64
+    function convertFileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+    
+    // Función para enviar datos
+    function sendFormData(formData) {
+      google.script.run
+        .withSuccessHandler(function(response) {
+          hideLoading();
+          isSubmitting = false;
+          document.getElementById('submitBtn').disabled = false;
+          
+          if (response.success) {
+            showMessage(
+              `${response.message}`,
+              'success',
+              '¡Registro Completado!'
+            );
+            
+            // Limpiar archivo si se subió
+            if (selectedFile) {
+              removeFile();
+            }
+            
+            // Actualizar vista previa
+            updatePreview();
+          } else {
+            showMessage(response.message, 'error', 'Error al guardar');
+          }
+        })
+        .withFailureHandler(function(error) {
+          hideLoading();
+          isSubmitting = false;
+          document.getElementById('submitBtn').disabled = false;
+          
+          showMessage('Error: ' + error.message, 'error', 'Error de conexión');
+        })
+        .procesarDatos(formData);
+    }
+    
+    // Limpiar solo campos editables
+    function clearAdditionalFields() {
+      if (confirm('¿Está seguro de limpiar los campos?')) {
+        document.getElementById('compensado').value = '';
+        document.getElementById('fecha_compensado').value = '';
+        document.getElementById('observaciones').value = '';
+        if (selectedFile) {
+          removeFile();
+        }
+        updatePreview();
+        showMessage('Campos limpiados', 'info', 'Formulario');
+      }
+    }
+    
+    // Manejar tecla Enter
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !isSubmitting) {
+        const activeElement = document.activeElement;
+        const isEditable = activeElement.classList.contains('editable-field');
+        
+        if (isEditable && activeElement.tagName.toLowerCase() !== 'textarea') {
+          submitForm();
+        }
+      }
+    });
+    
+    // Actualizar vista previa automáticamente
+    document.querySelectorAll('.editable-field').forEach(element => {
+      element.addEventListener('change', updatePreview);
+      element.addEventListener('input', updatePreview);
+    });
+    
+    // Prevenir edición en campos de solo lectura
+    document.querySelectorAll('.read-only-field').forEach(element => {
+      element.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        return false;
+      });
+      
+      element.addEventListener('keydown', function(e) {
+        e.preventDefault();
+        return false;
+      });
+    });
+  </script>
+</body>
+</html>
